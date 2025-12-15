@@ -31,6 +31,12 @@
       border: none !important;
       height: 1px !important;
     }
+    #comando { 
+      color:rgb(117, 130, 243) !important;
+    }
+    #argumento { 
+      color:rgb(251, 255, 40) !important;
+    }
   </style>
 </head>
 
@@ -155,14 +161,42 @@ As funções das entidades no sistema estão definidas abaixo:
 - Decidir automaticamente para qual membro de Comercial o cliente será redirecionado com base na quantidade de cards que cada membro de Comercial possui na fase de Comercial
 - Adicionar e alterar informações dos novos leads para a database no Pipefy
 - Adicionar e mover novos cards que representam leads ao pipe de Comercial
-- Executar funções internas com /command, alguns exemplos são:   
+- Executar funções internas com /command, sendo estas classificadas como funções internas *(funções que impactam de forma interna, ou seja, **alteram, excluem ou criam informações no Pipefy, Google Drive ou envolve algo destinado para os membros da EJ**)* ou funções externas *(funções que impactam de forma externa, ou seja, **são funções que impactam diretamente os clientes**, sendo majoritariamente funções que enviam mensagens)*. As funções, assim como em requisições, são classificadas por tipo e também possuem descrição da entidade de origem *(de onde vem)* e a entidade final *(para onde vai)*.
 
-  > **/get_msgs [num_telefone_cliente]**  
-  Se o comando for rodado sem argumentos, expõe uma lista clicável de números de telefone relacionados ao membro de Comercial que rodar o comando. Pode ser rodado por quaisquer membros de Financeiro, Comercial ou Administrativo para conseguir um contexto melhor para o caso de alguma dúvida.  
+  <span id="get" style="color: yellow; font-weight: 600;">{GET}</span>: Obtém informações a respeito de algum escopo descrito no comando.
+
+  <span id="patch" style="color: blue; font-weight: 600;">{PATCH}</span>: Altera informações presentes na database ou em algum card no Pipefy. 
+
+  <span id="delete" style="color: red; font-weight: 600;">{DELETE}</span>: Deleta alguma informação da database ou informação de um card ou o próprio card em si. 
+
+  <span id="post" style="color: green; font-weight: 600;">{POST}</span>: Adiciona um novo cliente à database do Pipefy ou um novo card ao Pipefy relacionado a um cliente existente ou não. 
+
+  > <span id="get" style="color: yellow; font-weight: 600;">{GET}</span> <b><span id="comando">/help</span></b>  
+  Exibe informações a respeito do bot em si e o que é possível fazer com ele, assim como explicações para os comandos que o bot consegue executar. Isto é, por conta da modularidade do bot, o bot retornaria quais as funções estão no ar, para o caso de manutenção ou melhoria de 
+  alguma função interna.
+
+  > <span id="get" style="color: yellow; font-weight: 600;">{GET}</span> <b><span id="comando">/get_roles</span></b>  
+  Exibe informações a respeito das roles atribuídas a cada pessoa na diretoria de Comercial, Financeiro e Administrativo.  
+
+  > <span id="get" style="color: yellow; font-weight: 600;">{GET}</span> <b><span id="comando">/get_msgs</span> <span id="argumento">[num_telefone_cliente]</span></b>  
+  *Se o comando for rodado sem argumentos, expõe uma lista clicável de números de telefone relacionados ao membro de Comercial que rodar o comando.*   
+  Pode ser rodado por quaisquer membros de Financeiro, Comercial ou Administrativo para conseguir um contexto melhor para o caso de alguma dúvida.  
   
-  > **/get_all_cards**  
+  > <b><span id="comando">/get_all_cards</span></b>  
   Obtém todas as informações de todos os cards relacionados aos leads ativos no Pipefy.   
 
-  > **/get_card [num_telefone_cliente]**  
-  Se o comando for rodado sem argumentos, expõe uma lista clicável de números de telefone de todos os cards  
-  relacionados aos leads 
+  > <b><span id="comando">/get_card</span> <span id="argumento">[num_telefone_cliente]</span></b>  
+  *Se o comando for rodado sem argumentos, expõe uma lista clicável de números de telefone de todos os cards relacionados aos leads.*  
+  Ao selecionar o número de um cliente, obtém todas as informações do cliente presentes no card no Pipefy.
+
+  > <b><span id="comando">/send_msg</span> <span id="argumento">[num_telefone_cliente]</span></b>  
+  *Se o comando for rodado sem argumentos, expõe uma lista clicável de números de telefone de todos os cards relacionados aos leads.*  
+  Envia uma mensagem para um cliente em específico. 
+
+  > <b><span id="comando">/get_info</span> <span id="argumento">[num_telefone_cliente]</span></b>  
+  *Se o comando for rodado sem argumentos, expõe uma lista clicável de números de telefone de todos os cards relacionados aos leads.*  
+  Obtém as informações de um cliente presentes na database do Pipefy.
+
+  > <b><span id="comando">/move_card</span> <span id="argumento">[num_telefone_cliente]</span></b>  
+  *Se o comando for rodado sem argumentos, expõe uma lista clicável de números de telefone de todos os cards relacionados aos leads.*  
+  Move o card relacionado ao cliente no Pipefy. Ao mover o card no Pipefy, uma nova mensagem pode ser redirecionada a um membro de Comercial, Administrativo ou Financeiro. 
