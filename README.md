@@ -116,6 +116,11 @@ Sumário
         </li>
       </ul>
     </li>
+    <li>
+      <a href="#estrutura_pastas">
+        4. Estrutura de pastas implementada
+      </a>
+    </li>
   </div>
 </div>
 
@@ -271,3 +276,227 @@ Agora, uma rápida exemplificação sobre como o arquivo `people_info.json` se p
   O comando serve para criar um novo card de forma mais "na mão", de forma com que seja possível adicionar o número de contato do cliente sem depender dele enviar uma mensagem pra gente. O número de telefone do novo cliente deve ser colocado sem parênteses ou hífen (-).  
   Caso o argumento <b><span id="argumento">[nome_fase_pipefy]</span></b> não seja informado na execução do comando, presume-se que o card será colocado na fase de Comercial, por se tratar de ser uma fase inicial. Mas, para o caso do lead querer um orçamento, deve ser colocado a fase "Financeiro".
   **Exemplo**: `/create_new_card 43984380116` ou `/create_new_card 43984380116 Financeiro` ou `/create_new_card 43984380116 financeiro`  
+
+<h2 id="estrutura_pastas">
+4. Estrutura de pastas implementada
+</h2>
+
+WABot/  
+├── 📁 src/                          # Código fonte principal  
+│   ├── 📁 domain/                   # Camada de Domínio (regras de negócio)  
+│   │   ├── 📁 entities/             # Entidades do sistema  
+│   │   │   ├── __init__.py  
+│   │   │   ├── person.py            # Classe   Person (Cliente, Membro, etc)  
+│   │   │   ├── message.py           # Classe   Message  
+│   │   │   └── pipefy_card.py       # Classe PipefyCard  
+│   │   ├── 📁 enums/                # Enumerações  
+│   │   │   ├── __init__.py  
+│   │   │   ├── role.py              # Enum Role   (Administrador, Diretor, etc)  
+│   │   │   ├── entity.py            # Enum Entity (Comercial, Financeiro, etc)  
+│   │   │   └── fase_pipefy.py       # Enum das fases do Pipefy  
+│   │   ├── 📁 interfaces/           # Contratos/Interfaces (ABCs)  
+│   │   │   ├── __init__.py  
+│   │   │   ├── people_repository.py # Interface do repositório de pessoas  
+│   │   │   ├── whatsapp_service.py  # Interface do serviço WhatsApp  
+│   │   │   └── pipefy_service.py    # Interface do serviço Pipefy  
+│   │   └── __init__.py  
+│   │  
+│   ├── 📁 application/              # Camada de Aplicação (casos de uso)  
+│   │   ├── 📁 use_cases/            # Casos de uso específicos  
+│   │   │   ├── __init__.py  
+│   │   │   ├── send_message.py      # Caso de uso: enviar mensagem  
+│   │   │   ├── get_messages.py      # Caso de uso: obter mensagens  
+│   │   │   └── move_card.py         # Caso de uso: mover card no Pipefy  
+│   │   ├── 📁 services/             # Serviços de aplicação  
+│   │   │   ├── __init__.py  
+│   │   │   ├── authorization.py     # Serviço de autorização  
+│   │   │   └── routing.py           # Serviço de roteamento de mensagens  
+│   │   ├── 📁 dtos/                 # Data Transfer Objects  
+│   │   │   ├── __init__.py   
+│   │   │   └── dtos.py              # Classes DTO  
+│   │   └── __init__.py  
+│   │  
+│   ├── 📁 infrastructure/           # Camada de Infraestrutura (implementações)  
+│   │   ├── 📁 whatsapp/             # Cliente WhatsApp (Meta API)  
+│   │   │   ├── __init__.py  
+│   │   │   └── meta_whatsapp.py     # Implementação da API Meta  
+│   │   ├── 📁 pipefy/               # Cliente Pipefy  
+│   │   │   ├── __init__.py  
+│   │   │   └── pipefy_client.py     # Cliente GraphQL do Pipefy  
+│   │   ├── 📁 storage/              # Armazenamento de dados  
+│   │   │   ├── __init__.py  
+│   │   │   └── people_repository.py # Implementação com JSON  
+│   │   ├── 📁 http/                 # Cliente HTTP base  
+│   │   │   ├── __init__.py  
+│   │   │   └── http_client.py       # Cliente HTTP com retry  
+│   │   └── __init__.py  
+│   │  
+│   ├── 📁 presentation/             # Camada de Apresentação (interface)  
+│   │   ├── 📁 commands/             # Comandos do bot  
+│   │   │   ├── __init__.py  
+│   │   │   ├── base_command.py      # Classe base de comando  
+│   │   │   ├── help_command.py      # Comando /help  
+│   │   │   ├── get_msgs_command.py  # Comando /get_msgs  
+│   │   │   ├── send_msg_command.py  # Comando /send_msg  
+│   │   │   └── command_factory.py   # Factory de comandos  
+│   │   ├── 📁 handlers/             # Handlers de mensagens  
+│   │   │   ├── __init__.py  
+│   │   │   └── message_handler.py   # Handler principal  
+│   │   ├── 📁 webhooks/             # Endpoints de webhook  
+│   │   │   ├── __init__.py  
+│   │   │   └── whatsapp_webhook.py  # Webhook do WhatsApp  
+│   │   └── __init__.py  
+│   │  
+│   ├── 📁 shared/                   # Código compartilhado  
+│   │   ├── 📁 errors/               # Erros customizados  
+│   │   │   ├── __init__.py  
+│   │   │   └── exceptions.py        # Classes de exceção  
+│   │   ├── 📁 validators/           # Validadores  
+│   │   │   ├── __init__.py  
+│   │   │   └── schemas.py           # Schemas de validação (Pydantic)  
+│   │   ├── 📁 utils/                # Utilitários  
+│   │   │   ├── __init__.py  
+│   │   │   └── helpers.py           # Funções auxiliares  
+│   │   ├── __init__.py  
+│   │   ├── logger.py                # Configuração de logs  
+│   │   └── config.py                # Configurações da aplicação  
+│   │  
+│   ├── __init__.py  
+│   └── main.py                      # Ponto de entrada da aplicação  
+│  
+├── 📁 data/                         # Dados persistentes  
+│   └── people_info.json             # Arquivo de pessoas  
+│  
+├── 📁 logs/                         # Arquivos de log  
+│   └── .gitkeep  
+│  
+├── 📁 tests/                        # Testes  
+│   ├── 📁 unit/                     # Testes unitários  
+│   ├── 📁 integration/              # Testes de integração  
+│   └── __init__.py  
+│  
+├── .env.example                     # Exemplo de variáveis de ambiente  
+├── .env                             # Variáveis de ambiente (não commitado)  
+├── .gitignore                       # Arquivos ignorados pelo Git  
+├── requirements.txt                 # Dependências do projeto  
+├── pyproject.toml                   # Configuração do projeto Python  
+└── README.md                        # Documentação  
+
+Collecting workspace information# Explicação da Estrutura de Pastas
+
+## 📁 src/
+Contém todo o código fonte da aplicação, organizado em camadas.
+
+---
+
+### 📁 domain/ (Camada de Domínio)
+Coração do sistema - contém regras de negócio puras, sem dependências externas.
+
+- **📁 entities/** - Classes que representam os objetos principais do sistema:
+  - `person.py` - Representa uma pessoa (cliente, membro, diretor, etc.)
+  - `message.py` - Representa uma mensagem trocada no WhatsApp
+  - `pipefy_card.py` - Representa um card do Pipefy
+
+- **📁 enums/** - Valores constantes e categorizados:
+  - `role.py` - Tipos de papéis (Administrador, Diretor, Membro, Cliente)
+  - `entity.py` - Diretorias (Comercial, Administrativo, Financeiro)
+  - `fase_pipefy.py` - Fases do pipeline no Pipefy
+
+- **📁 interfaces/** - Contratos abstratos que definem o que os serviços devem fazer (sem implementação):
+  - `people_repository.py` - Define operações de leitura/escrita de pessoas
+  - `whatsapp_service.py` - Define operações do WhatsApp
+  - `pipefy_service.py` - Define operações do Pipefy
+
+---
+
+### 📁 application/ (Camada de Aplicação)
+Orquestra as regras de negócio e coordena o fluxo de dados.
+
+- **📁 use_cases/** - Cada arquivo representa uma ação específica do sistema:
+  - `send_message.py` - Lógica para enviar mensagem
+  - `get_messages.py` - Lógica para obter mensagens
+  - `move_card.py` - Lógica para mover card no Pipefy
+
+- **📁 services/** - Serviços auxiliares da aplicação:
+  - `authorization.py` - Verifica se usuário pode executar determinado comando
+  - `routing.py` - Decide para qual membro de Comercial encaminhar o cliente
+
+- **📁 dtos/** - Objetos simples para transferir dados entre camadas:
+  - `dtos.py` - Classes que estruturam dados de entrada/saída
+
+---
+
+### 📁 infrastructure/ (Camada de Infraestrutura)
+Implementações concretas que se comunicam com serviços externos.
+
+- **📁 whatsapp/** - Integração com WhatsApp:
+  - `meta_whatsapp.py` - Implementação usando a API da Meta
+
+- **📁 pipefy/** - Integração com Pipefy:
+  - `pipefy_client.py` - Cliente que faz requisições GraphQL ao Pipefy
+
+- **📁 storage/** - Persistência de dados:
+  - `people_repository.py` - Lê/escreve no arquivo `people_info.json`
+
+- **📁 http/** - Utilitários de comunicação HTTP:
+  - `http_client.py` - Cliente HTTP com retry automático em caso de falhas
+
+---
+
+### 📁 presentation/ (Camada de Apresentação)
+Interface do sistema com o mundo externo (entrada de dados).
+
+- **📁 commands/** - Implementação dos comandos do bot:
+  - `base_command.py` - Classe base que todos os comandos herdam
+  - `help_command.py` - Implementa `/help`
+  - `get_msgs_command.py` - Implementa `/get_msgs`
+  - `send_msg_command.py` - Implementa `/send_msg`
+  - `command_factory.py` - Cria o comando correto baseado no texto recebido
+
+- **📁 handlers/** - Processadores de mensagens:
+  - `message_handler.py` - Recebe mensagem e decide o que fazer (comando ou redirecionamento)
+
+- **📁 webhooks/** - Endpoints que recebem dados externos:
+  - `whatsapp_webhook.py` - Recebe notificações da API do WhatsApp
+
+---
+
+### 📁 shared/ (Código Compartilhado)
+Utilitários e configurações usados por todas as camadas.
+
+- **📁 errors/** - Exceções personalizadas:
+  - `exceptions.py` - Classes de erro específicas (ex: `UnauthorizedError`)
+
+- **📁 validators/** - Validação de dados:
+  - `schemas.py` - Define formato esperado dos dados usando Pydantic
+
+- **📁 utils/** - Funções auxiliares:
+  - `helpers.py` - Funções genéricas (formatação de telefone, etc.)
+
+- `logger.py` - Configuração centralizada de logs
+- `config.py` - Carrega variáveis de ambiente e configurações
+
+---
+
+### `main.py`
+Ponto de entrada - inicializa e conecta todas as camadas.
+
+---
+
+## 📁 data/
+Armazena dados persistentes.
+- `people_info.json` - Cadastro de pessoas e suas permissões
+
+## 📁 logs/
+Arquivos de log gerados pela aplicação.
+
+## 📁 tests/
+Testes automatizados.
+- **📁 unit/** - Testes de unidades isoladas
+- **📁 integration/** - Testes de integração entre componentes
+
+## Arquivos raiz
+- `.env` / `.env.example` - Variáveis de ambiente (tokens, chaves de API)
+- `requirements.txt` - Dependências Python
+- `pyproject.toml` - Configuração do projeto Python
+- `.gitignore` - Arquivos ignorados pelo Git
